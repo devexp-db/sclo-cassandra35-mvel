@@ -1,7 +1,7 @@
 
 Name:          mvel
 Version:       2.0.19
-Release:       1%{?dist}
+Release:       2%{?dist}
 Summary:       MVFLEX Expression Language
 Group:         Development/Libraries
 License:       ASL 2.0
@@ -96,6 +96,9 @@ install -pm 755 %{SOURCE1} %{buildroot}%{_bindir}/%{name}
 %doc LICENSE.txt
 
 %changelog
+* Fri Jul 20 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.0.19-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
 * Sat May 26 2012 gil cattaneo <puntogil@libero.it> 2.0.19-1
 - initial rpm
 
