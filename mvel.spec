@@ -1,7 +1,7 @@
 
 Name:          mvel
 Version:       2.0.19
-Release:       2%{?dist}
+Release:       3%{?dist}
 Summary:       MVFLEX Expression Language
 Group:         Development/Libraries
 License:       ASL 2.0
@@ -22,7 +22,7 @@ BuildRequires: objectweb-asm
 BuildRequires: junit
 BuildRequires: xstream
 
-BuildRequires: maven
+BuildRequires: maven-local
 BuildRequires: maven-compiler-plugin
 BuildRequires: maven-install-plugin
 BuildRequires: maven-jar-plugin
@@ -96,6 +96,10 @@ install -pm 755 %{SOURCE1} %{buildroot}%{_bindir}/%{name}
 %doc LICENSE.txt
 
 %changelog
+* Wed Feb 06 2013 Java SIG <java-devel@lists.fedoraproject.org> - 2.0.19-3
+- Update for https://fedoraproject.org/wiki/Fedora_19_Maven_Rebuild
+- Replace maven BuildRequires with maven-local
+
 * Fri Jul 20 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.0.19-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
 
