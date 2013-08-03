@@ -1,6 +1,6 @@
 Name:          mvel
 Version:       2.0.19
-Release:       5%{?dist}
+Release:       6%{?dist}
 Summary:       MVFLEX Expression Language
 License:       ASL 2.0
 Url:           http://mvel.codehaus.org/
@@ -67,6 +67,9 @@ install -pm 755 %{SOURCE1} %{buildroot}%{_bindir}/%{name}
 %doc LICENSE.txt
 
 %changelog
+* Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.0.19-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
+
 * Fri Jul 05 2013 gil cattaneo <puntogil@libero.it> 2.0.19-5
 - switch to XMvn
 - minor changes to adapt to current guideline
