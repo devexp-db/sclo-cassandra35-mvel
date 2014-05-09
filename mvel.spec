@@ -1,17 +1,19 @@
 %global namedreltag .Final
 %global namedversion %{version}%{?namedreltag}
+
 Name:          mvel
 Version:       2.1.6
-Release:       1%{?dist}
+Release:       2%{?dist}
 Summary:       MVFLEX Expression Language
 License:       ASL 2.0
 Url:           http://mvel.codehaus.org/
 Source0:       https://github.com/mvel/mvel/archive/%{name}2-%{namedversion}.tar.gz
-
 Source1:       %{name}-script
 Patch0:        %{name}-2.1.6.Final-use-system-asm.patch
 # remove tests which require internal objectweb-asm libraries
 Patch1:        %{name}-2.1.6.Final-tests.patch
+# See https://bugzilla.redhat.com/show_bug.cgi?id=1095339
+Patch2:        %{name}-2.1.6.Final-java8.patch
 
 BuildRequires: java-devel
 
@@ -46,6 +48,7 @@ find . -name "*.class" -delete
 rm ASM-LICENSE.txt
 %patch0 -p1
 %patch1 -p1
+%patch2 -p0
 
 # Uwanted
 %pom_remove_plugin :maven-source-plugin
@@ -57,19 +60,23 @@ sed -i 's/\r//' LICENSE.txt
 # fix non ASCII chars
 native2ascii -encoding UTF8 src/main/java/org/mvel2/sh/ShellSession.java src/main/java/org/mvel2/sh/ShellSession.java
 
+cp -p %{SOURCE1} .
+%if %{fedora} > 20
+sed -i "s|objectweb-asm/|objectweb-asm3/|" %{name}-script
+%endif
+
 %build
 
 %mvn_file :%{name}2 %{name}
-# some test at random fails
-%mvn_build -- -Dmaven.test.failure.ignore=true
+%mvn_build
 
 %install
 %mvn_install
 
 mkdir -p %{buildroot}%{_bindir}
-install -pm 755 %{SOURCE1} %{buildroot}%{_bindir}/%{name}
+install -pm 755 %{name}-script %{buildroot}%{_bindir}/%{name}
 
-install -m 644 target/%{name}2-%{namedversion}-tests.jar %{buildroot}%{_javadir}/%{name}-tests.jar
+install -m 644 target/%%{name}2-%%{namedversion}-tests.jar %%{buildroot}%%{_javadir}/%%{name}-tests.jar
 
 %files -f .mfiles
 %{_bindir}/%{name}
@@ -80,6 +87,9 @@ install -m 644 target/%{name}2-%{namedversion}-tests.jar %{buildroot}%{_javadir}
 %doc LICENSE.txt
 
 %changelog
+* Fri May 09 2014 gil cattaneo <puntogil@libero.it> 2.1.6-2
+- fix rhbz#1095339
+
 * Mon Sep 16 2013 gil cattaneo <puntogil@libero.it> 2.1.6-1
 - update to 2.1.6.Final
 
