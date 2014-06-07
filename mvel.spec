@@ -25,7 +25,7 @@ BuildRequires: mvn(com.thoughtworks.xstream:xstream)
 
 BuildRequires: maven-local
 BuildRequires: maven-plugin-bundle
-BuildRequires: maven-surefire-provider-junit4
+BuildRequires: maven-surefire-provider-junit
 BuildRequires: maven-surefire-report-plugin
 
 BuildArch:     noarch
