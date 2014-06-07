@@ -3,7 +3,7 @@
 
 Name:          mvel
 Version:       2.1.6
-Release:       2%{?dist}
+Release:       3%{?dist}
 Summary:       MVFLEX Expression Language
 License:       ASL 2.0
 Url:           http://mvel.codehaus.org/
@@ -88,6 +88,9 @@ install -pm 755 %{name}-script %{buildroot}%{_bindir}/%{name}
 %doc LICENSE.txt
 
 %changelog
+* Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.1.6-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
+
 * Fri May 09 2014 gil cattaneo <puntogil@libero.it> 2.1.6-2
 - fix rhbz#1095339
 
