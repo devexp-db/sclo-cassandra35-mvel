@@ -3,7 +3,7 @@
 
 Name:          mvel
 Version:       2.2.2
-Release:       1%{?dist}
+Release:       2%{?dist}
 Summary:       MVFLEX Expression Language
 License:       ASL 2.0
 Url:           http://mvel.codehaus.org/
@@ -21,7 +21,6 @@ BuildRequires: mvn(com.thoughtworks.xstream:xstream)
 
 BuildRequires: maven-local
 BuildRequires: maven-plugin-bundle
-BuildRequires: maven-surefire-provider-junit
 BuildRequires: maven-surefire-report-plugin
 
 BuildArch:     noarch
@@ -59,9 +58,10 @@ sed -i 's/\r//' LICENSE.txt
 # fix non ASCII chars
 native2ascii -encoding UTF8 src/main/java/org/mvel2/sh/ShellSession.java src/main/java/org/mvel2/sh/ShellSession.java
 
+%mvn_file :%{name}2 %{name}
+
 %build
 
-%mvn_file :%{name}2 %{name}
 # Tests fails only on ARM builder
 %mvn_build -f
 
@@ -73,12 +73,15 @@ install -pm 755 %{SOURCE1} %{buildroot}%{_bindir}/%{name}
 
 %files -f .mfiles
 %{_bindir}/%{name}
-%doc LICENSE.txt
+%license LICENSE.txt
 
 %files javadoc -f .mfiles-javadoc
-%doc LICENSE.txt
+%license LICENSE.txt
 
 %changelog
+* Tue Feb 10 2015 gil cattaneo <puntogil@libero.it> 2.2.2-2
+- introduce license macro
+
 * Thu Dec 18 2014 gil cattaneo <puntogil@libero.it> 2.2.2-1
 - update to 2.2.2.Final
 
