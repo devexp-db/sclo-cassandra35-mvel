@@ -3,7 +3,7 @@
 
 Name:          mvel
 Version:       2.2.2
-Release:       2%{?dist}
+Release:       3%{?dist}
 Summary:       MVFLEX Expression Language
 License:       ASL 2.0
 Url:           http://mvel.codehaus.org/
@@ -79,6 +79,9 @@ install -pm 755 %{SOURCE1} %{buildroot}%{_bindir}/%{name}
 %license LICENSE.txt
 
 %changelog
+* Wed Jun 17 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.2.2-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
+
 * Tue Feb 10 2015 gil cattaneo <puntogil@libero.it> 2.2.2-2
 - introduce license macro
 
