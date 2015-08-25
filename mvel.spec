@@ -2,26 +2,24 @@
 %global namedversion %{version}%{?namedreltag}
 
 Name:          mvel
-Version:       2.2.2
-Release:       3%{?dist}
+Version:       2.2.6
+Release:       1%{?dist}
 Summary:       MVFLEX Expression Language
 License:       ASL 2.0
 Url:           https://github.com/mvel
 Source0:       https://github.com/mvel/mvel/archive/%{name}2-%{namedversion}.tar.gz
 Source1:       %{name}-script
-Patch0:        %{name}-2.2.2.Final-use-system-asm.patch
+Patch0:        %{name}-2.2.6.Final-use-system-asm.patch
 # remove tests which require internal objectweb-asm libraries
-Patch1:        %{name}-2.2.2.Final-tests.patch
-
-BuildRequires: mvn(org.ow2.asm:asm)
-BuildRequires: mvn(org.ow2.asm:asm-util)
-# test deps 
-BuildRequires: mvn(junit:junit)
-BuildRequires: mvn(com.thoughtworks.xstream:xstream)
+Patch1:        %{name}-2.2.6.Final-tests.patch
 
 BuildRequires: maven-local
-BuildRequires: maven-plugin-bundle
-BuildRequires: maven-surefire-report-plugin
+BuildRequires: mvn(com.thoughtworks.xstream:xstream)
+BuildRequires: mvn(junit:junit)
+BuildRequires: mvn(org.apache.felix:maven-bundle-plugin)
+BuildRequires: mvn(org.apache.maven.plugins:maven-surefire-report-plugin)
+BuildRequires: mvn(org.ow2.asm:asm)
+BuildRequires: mvn(org.ow2.asm:asm-util)
 
 BuildArch:     noarch
 
@@ -43,6 +41,7 @@ find . -name "*.class" -delete
 
 rm ASM-LICENSE.txt
 %patch0 -p1
+rm -rf src/main/java/org/mvel2/asm
 %patch1 -p1
 
 # See https://bugzilla.redhat.com/show_bug.cgi?id=1095339
@@ -79,6 +78,9 @@ install -pm 755 %{SOURCE1} %{buildroot}%{_bindir}/%{name}
 %license LICENSE.txt
 
 %changelog
+* Tue Aug 25 2015 gil cattaneo <puntogil@libero.it> 2.2.6-1
+- update to 2.2.6.Final
+
 * Wed Jun 17 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.2.2-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
 

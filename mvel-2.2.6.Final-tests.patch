@@ -1,6 +1,6 @@
-diff -Nru mvel-mvel2-2.2.2.Final/src/test/java/org/mvel2/tests/classes/ClassTests.java mvel-mvel2-2.2.2.Final-gil/src/test/java/org/mvel2/tests/classes/ClassTests.java
---- mvel-mvel2-2.2.2.Final/src/test/java/org/mvel2/tests/classes/ClassTests.java	2014-12-18 17:03:32.708716206 +0100
-+++ mvel-mvel2-2.2.2.Final-gil/src/test/java/org/mvel2/tests/classes/ClassTests.java	2014-12-18 16:56:24.975768066 +0100
+diff -Nru mvel-mvel2-2.2.6.Final/src/test/java/org/mvel2/tests/classes/ClassTests.java mvel-mvel2-2.2.6.Final.tests/src/test/java/org/mvel2/tests/classes/ClassTests.java
+--- mvel-mvel2-2.2.6.Final/src/test/java/org/mvel2/tests/classes/ClassTests.java	2015-08-03 15:38:02.000000000 +0200
++++ mvel-mvel2-2.2.6.Final.tests/src/test/java/org/mvel2/tests/classes/ClassTests.java	2015-08-25 19:06:38.893242873 +0200
 @@ -14,7 +14,7 @@
    private final String dir = "src/test/java/" + getClass().getPackage().getName().replaceAll("\\.", "/");
  
@@ -10,10 +10,10 @@ diff -Nru mvel-mvel2-2.2.2.Final/src/test/java/org/mvel2/tests/classes/ClassTest
    }
  
  }
-diff -Nru mvel-mvel2-2.2.2.Final/src/test/java/org/mvel2/tests/core/CoreConfidenceTests.java mvel-mvel2-2.2.2.Final-gil/src/test/java/org/mvel2/tests/core/CoreConfidenceTests.java
---- mvel-mvel2-2.2.2.Final/src/test/java/org/mvel2/tests/core/CoreConfidenceTests.java	2014-12-18 17:03:32.734714809 +0100
-+++ mvel-mvel2-2.2.2.Final-gil/src/test/java/org/mvel2/tests/core/CoreConfidenceTests.java	2014-12-18 17:03:21.463320497 +0100
-@@ -3391,6 +3391,7 @@
+diff -Nru mvel-mvel2-2.2.6.Final/src/test/java/org/mvel2/tests/core/CoreConfidenceTests.java mvel-mvel2-2.2.6.Final.tests/src/test/java/org/mvel2/tests/core/CoreConfidenceTests.java
+--- mvel-mvel2-2.2.6.Final/src/test/java/org/mvel2/tests/core/CoreConfidenceTests.java	2015-08-03 15:38:02.000000000 +0200
++++ mvel-mvel2-2.2.6.Final.tests/src/test/java/org/mvel2/tests/core/CoreConfidenceTests.java	2015-08-25 19:06:38.894242826 +0200
+@@ -3389,6 +3389,7 @@
    public void testNestedEnumFromJar() throws ClassNotFoundException,
        SecurityException,
        NoSuchFieldException {
@@ -21,7 +21,7 @@ diff -Nru mvel-mvel2-2.2.2.Final/src/test/java/org/mvel2/tests/core/CoreConfiden
      String expr = "EventRequest.Status.ACTIVE";
  
      // creating a classloader for the jar
-@@ -3422,6 +3423,7 @@
+@@ -3420,6 +3421,7 @@
      Object result = MVEL.executeExpression(compiled);
  
      assertNotNull(result);
@@ -29,7 +29,7 @@ diff -Nru mvel-mvel2-2.2.2.Final/src/test/java/org/mvel2/tests/core/CoreConfiden
    }
  
    public void testContextObjMethodCall() {
-@@ -3434,8 +3436,8 @@
+@@ -3432,8 +3434,8 @@
      ExecutableStatement stmt = (ExecutableStatement) MVEL.compileExpression(str, pctx);
      Bar ctx = new Bar();
      ctx.setName("bob");
@@ -40,7 +40,7 @@ diff -Nru mvel-mvel2-2.2.2.Final/src/test/java/org/mvel2/tests/core/CoreConfiden
    }
  
    public void testMapAccessWithNestedMethodCall() {
-@@ -3449,8 +3451,8 @@
+@@ -3447,8 +3449,8 @@
  
      POJO ctx = new POJO();
      ctx.getMap().put("1", "one");
@@ -51,7 +51,7 @@ diff -Nru mvel-mvel2-2.2.2.Final/src/test/java/org/mvel2/tests/core/CoreConfiden
    }
  
    public void testMapAccessWithNestedProperty() {
-@@ -3464,8 +3466,8 @@
+@@ -3462,8 +3464,8 @@
  
      POJO ctx = new POJO();
      ctx.getMap().put("1", "one");
@@ -62,9 +62,9 @@ diff -Nru mvel-mvel2-2.2.2.Final/src/test/java/org/mvel2/tests/core/CoreConfiden
    }
  
    public void testArrays() {
-diff -Nru mvel-mvel2-2.2.2.Final/src/test/java/org/mvel2/tests/core/WithTests.java mvel-mvel2-2.2.2.Final-gil/src/test/java/org/mvel2/tests/core/WithTests.java
---- mvel-mvel2-2.2.2.Final/src/test/java/org/mvel2/tests/core/WithTests.java	2014-12-18 17:03:32.738714594 +0100
-+++ mvel-mvel2-2.2.2.Final-gil/src/test/java/org/mvel2/tests/core/WithTests.java	2014-12-18 16:59:36.603424440 +0100
+diff -Nru mvel-mvel2-2.2.6.Final/src/test/java/org/mvel2/tests/core/WithTests.java mvel-mvel2-2.2.6.Final.tests/src/test/java/org/mvel2/tests/core/WithTests.java
+--- mvel-mvel2-2.2.6.Final/src/test/java/org/mvel2/tests/core/WithTests.java	2015-08-03 15:38:02.000000000 +0200
++++ mvel-mvel2-2.2.6.Final.tests/src/test/java/org/mvel2/tests/core/WithTests.java	2015-08-25 19:06:38.894242826 +0200
 @@ -352,7 +352,7 @@
  
      Serializable s = MVEL.compileExpression(expr);
