@@ -2,16 +2,16 @@
 %global namedversion %{version}%{?namedreltag}
 
 Name:          mvel
-Version:       2.2.6
-Release:       2%{?dist}
+Version:       2.2.7
+Release:       1%{?dist}
 Summary:       MVFLEX Expression Language
 License:       ASL 2.0
 Url:           https://github.com/mvel
 Source0:       https://github.com/mvel/mvel/archive/%{name}2-%{namedversion}.tar.gz
 Source1:       %{name}-script
-Patch0:        %{name}-2.2.6.Final-use-system-asm.patch
+Patch0:        %{name}-2.2.7.Final-use-system-asm.patch
 # remove tests which require internal objectweb-asm libraries
-Patch1:        %{name}-2.2.6.Final-tests.patch
+Patch1:        %{name}-2.2.7.Final-tests.patch
 
 BuildRequires: maven-local
 BuildRequires: mvn(com.thoughtworks.xstream:xstream)
@@ -40,6 +40,7 @@ find . -name "*.jar" -delete
 find . -name "*.class" -delete
 
 rm ASM-LICENSE.txt
+
 %patch0 -p1
 rm -rf src/main/java/org/mvel2/asm
 %patch1 -p1
@@ -78,6 +79,9 @@ install -pm 755 %{SOURCE1} %{buildroot}%{_bindir}/%{name}
 %license LICENSE.txt
 
 %changelog
+* Thu Feb 11 2016 gil cattaneo <puntogil@libero.it> 2.2.7-1
+- update to 2.2.7.Final
+
 * Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 2.2.6-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 
