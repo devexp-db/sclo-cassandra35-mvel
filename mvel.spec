@@ -3,7 +3,7 @@
 
 Name:          mvel
 Version:       2.2.7
-Release:       1%{?dist}
+Release:       2%{?dist}
 Summary:       MVFLEX Expression Language
 License:       ASL 2.0
 Url:           https://github.com/mvel
@@ -17,6 +17,7 @@ BuildRequires: maven-local
 BuildRequires: mvn(com.thoughtworks.xstream:xstream)
 BuildRequires: mvn(junit:junit)
 BuildRequires: mvn(org.apache.felix:maven-bundle-plugin)
+BuildRequires: mvn(org.apache.maven.plugins:maven-enforcer-plugin)
 BuildRequires: mvn(org.apache.maven.plugins:maven-surefire-report-plugin)
 BuildRequires: mvn(org.ow2.asm:asm)
 BuildRequires: mvn(org.ow2.asm:asm-util)
@@ -79,6 +80,9 @@ install -pm 755 %{SOURCE1} %{buildroot}%{_bindir}/%{name}
 %license LICENSE.txt
 
 %changelog
+* Thu Jun 30 2016 gil cattaneo <puntogil@libero.it> 2.2.7-2
+- add missing build requires
+
 * Thu Feb 11 2016 gil cattaneo <puntogil@libero.it> 2.2.7-1
 - update to 2.2.7.Final
 
