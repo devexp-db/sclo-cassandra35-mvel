@@ -1,26 +1,29 @@
+%{?scl:%scl_package mvel}
+%{!?scl:%global pkg_name %{name}}
+
 %global namedreltag .Final
 %global namedversion %{version}%{?namedreltag}
 
-Name:          mvel
+Name:          %{?scl_prefix}mvel
 Version:       2.2.7
-Release:       2%{?dist}
+Release:       3%{?dist}
 Summary:       MVFLEX Expression Language
 License:       ASL 2.0
-Url:           https://github.com/mvel
-Source0:       https://github.com/mvel/mvel/archive/%{name}2-%{namedversion}.tar.gz
-Source1:       %{name}-script
-Patch0:        %{name}-2.2.7.Final-use-system-asm.patch
+Url:           https://github.com/%{pkg_name}
+Source0:       https://github.com/%{pkg_name}/%{pkg_name}/archive/%{pkg_name}2-%{namedversion}.tar.gz
+Source1:       %{pkg_name}-script
 # remove tests which require internal objectweb-asm libraries
-Patch1:        %{name}-2.2.7.Final-tests.patch
+Patch0:        %{pkg_name}-%{namedversion}-tests.patch
+Patch1:        unbundle_asm.patch
 
-BuildRequires: maven-local
-BuildRequires: mvn(com.thoughtworks.xstream:xstream)
-BuildRequires: mvn(junit:junit)
-BuildRequires: mvn(org.apache.felix:maven-bundle-plugin)
-BuildRequires: mvn(org.apache.maven.plugins:maven-enforcer-plugin)
-BuildRequires: mvn(org.apache.maven.plugins:maven-surefire-report-plugin)
-BuildRequires: mvn(org.ow2.asm:asm)
-BuildRequires: mvn(org.ow2.asm:asm-util)
+BuildRequires: %{?scl_mvn_prefix}maven-local
+BuildRequires: %{?scl_mvn_prefix}mvn(com.thoughtworks.xstream:xstream)
+BuildRequires: %{?scl_java_prefix}junit
+BuildRequires: %{?scl_mvn_prefix}maven-plugin-bundle
+BuildRequires: %{?scl_mvn_prefix}mvn(org.apache.maven.plugins:maven-enforcer-plugin)
+BuildRequires: %{?scl_mvn_prefix}mvn(org.apache.maven.plugins:maven-surefire-report-plugin)
+BuildRequires: %{?scl_java_prefix}objectweb-asm%{?scl:5}
+%{?scl:Requires: %scl_runtime}
 
 BuildArch:     noarch
 
@@ -36,50 +39,72 @@ Summary:       Javadoc for %{name}
 This package contains javadoc for %{name}.
 
 %prep
-%setup -q -n %{name}-%{name}2-%{namedversion}
+%setup -q -n %{pkg_name}-%{pkg_name}2-%{namedversion}
 find . -name "*.jar" -delete
 find . -name "*.class" -delete
 
 rm ASM-LICENSE.txt
 
 %patch0 -p1
-rm -rf src/main/java/org/mvel2/asm
-%patch1 -p1
 
 # See https://bugzilla.redhat.com/show_bug.cgi?id=1095339
 sed -i '/Unsafe/d' src/main/java/org/mvel2/util/JITClassLoader.java
 
+%{?scl_enable}
 # Uwanted
 %pom_remove_plugin :maven-source-plugin
 # Remove org.apache.maven.wagon:wagon-webdav:1.0-beta-2
 %pom_xpath_remove "pom:project/pom:build/pom:extensions"
+
+# remove bundled asm
+rm -rf src/main/java/org/mvel2/asm
+# patch asm dependent files so that they depend on org.objectweb.asm
+%patch1 -p1
+# add asm dependency as the bundled one is removed
+%pom_add_dep org.ow2.asm:asm:5
+%pom_add_dep org.ow2.asm:asm-util:5
 
 sed -i 's/\r//' LICENSE.txt
 
 # fix non ASCII chars
 native2ascii -encoding UTF8 src/main/java/org/mvel2/sh/ShellSession.java src/main/java/org/mvel2/sh/ShellSession.java
 
-%mvn_file :%{name}2 %{name}
+%mvn_file :%{pkg_name}2 %{pkg_name}
+%{?scl_disable}
 
 %build
-
+%{?scl_enable}
+%ifarch %{arm}
 # Tests fails only on ARM builder
 %mvn_build -f
+%else
+%mvn_build
+%endif
+%{?scl_disable}
 
 %install
+%{?scl_enable}
 %mvn_install
 
-mkdir -p %{buildroot}%{_bindir}
-install -pm 755 %{SOURCE1} %{buildroot}%{_bindir}/%{name}
+%{!?scl:mkdir -p %{buildroot}%{_bindir}}
+%{?scl:mkdir -p %{buildroot}%{_root_bindir}}
+%{!?scl:install -pm 755 %{SOURCE1} %{buildroot}%{_bindir}/%{pkg_name}}
+%{?scl:install -pm 755 %{SOURCE1} %{buildroot}%{_root_bindir}/%{pkg_name}}
+%{?scl_disable}
 
 %files -f .mfiles
-%{_bindir}/%{name}
+%{!?scl:%{_bindir}/%{pkg_name}}
+%{?scl:%{_root_bindir}/%{pkg_name}}
 %license LICENSE.txt
 
 %files javadoc -f .mfiles-javadoc
 %license LICENSE.txt
 
 %changelog
+* Wed Sep 21 2016 Tomas Repik <trepik@redhat.com> - 2.2.7-3
+- scl conversion
+- removed bundled asm
+
 * Thu Jun 30 2016 gil cattaneo <puntogil@libero.it> 2.2.7-2
 - add missing build requires
 
