@@ -4,28 +4,28 @@
 %global namedreltag .Final
 %global namedversion %{version}%{?namedreltag}
 
-Name:          %{?scl_prefix}mvel
-Version:       2.2.7
-Release:       3%{?dist}
-Summary:       MVFLEX Expression Language
-License:       ASL 2.0
-Url:           https://github.com/%{pkg_name}
-Source0:       https://github.com/%{pkg_name}/%{pkg_name}/archive/%{pkg_name}2-%{namedversion}.tar.gz
-Source1:       %{pkg_name}-script
+Name:		%{?scl_prefix}mvel
+Version:	2.2.7
+Release:	4%{?dist}
+Summary:	MVFLEX Expression Language
+License:	ASL 2.0
+Url:		https://github.com/%{pkg_name}
+Source0:	https://github.com/%{pkg_name}/%{pkg_name}/archive/%{pkg_name}2-%{namedversion}.tar.gz
+Source1:	%{pkg_name}-script
 # remove tests which require internal objectweb-asm libraries
-Patch0:        %{pkg_name}-%{namedversion}-tests.patch
-Patch1:        unbundle_asm.patch
+Patch0:		%{pkg_name}-%{namedversion}-tests.patch
+Patch1:		unbundle_asm.patch
 
-BuildRequires: %{?scl_mvn_prefix}maven-local
-BuildRequires: %{?scl_mvn_prefix}mvn(com.thoughtworks.xstream:xstream)
-BuildRequires: %{?scl_java_prefix}junit
-BuildRequires: %{?scl_mvn_prefix}maven-plugin-bundle
-BuildRequires: %{?scl_mvn_prefix}mvn(org.apache.maven.plugins:maven-enforcer-plugin)
-BuildRequires: %{?scl_mvn_prefix}mvn(org.apache.maven.plugins:maven-surefire-report-plugin)
-BuildRequires: %{?scl_java_prefix}objectweb-asm%{?scl:5}
+BuildRequires:	%{?scl_prefix_maven}maven-local
+BuildRequires:	%{?scl_prefix_maven}xstream
+BuildRequires:	%{?scl_prefix_maven}maven-plugin-bundle
+BuildRequires:	%{?scl_prefix_maven}maven-surefire-report-plugin
+BuildRequires:	%{?scl_prefix_java_common}objectweb-asm%{?scl:5}
+# test dependencies
+BuildRequires:	%{?scl_prefix_java_common}junit
 %{?scl:Requires: %scl_runtime}
 
-BuildArch:     noarch
+BuildArch:	noarch
 
 %description
 MVEL is a powerful expression language for Java-based applications. It
@@ -33,7 +33,7 @@ provides a plethora of features and is suited for everything from the
 smallest property binding and extraction, to full blown scripts.
 
 %package javadoc
-Summary:       Javadoc for %{name}
+Summary:	Javadoc for %{name}
 
 %description javadoc
 This package contains javadoc for %{name}.
@@ -50,9 +50,10 @@ rm ASM-LICENSE.txt
 # See https://bugzilla.redhat.com/show_bug.cgi?id=1095339
 sed -i '/Unsafe/d' src/main/java/org/mvel2/util/JITClassLoader.java
 
-%{?scl_enable}
-# Uwanted
+%{?scl:scl enable %{scl_maven} %{scl} - << "EOF"}
+# remove unnecessary plugins
 %pom_remove_plugin :maven-source-plugin
+%pom_remove_plugin :maven-enforcer-plugin
 # Remove org.apache.maven.wagon:wagon-webdav:1.0-beta-2
 %pom_xpath_remove "pom:project/pom:build/pom:extensions"
 
@@ -70,37 +71,37 @@ sed -i 's/\r//' LICENSE.txt
 native2ascii -encoding UTF8 src/main/java/org/mvel2/sh/ShellSession.java src/main/java/org/mvel2/sh/ShellSession.java
 
 %mvn_file :%{pkg_name}2 %{pkg_name}
-%{?scl_disable}
+%{?scl:EOF}
 
 %build
-%{?scl_enable}
+%{?scl:scl enable %{scl_maven} %{scl} - << "EOF"}
 %ifarch %{arm}
 # Tests fails only on ARM builder
 %mvn_build -f
 %else
 %mvn_build
 %endif
-%{?scl_disable}
+%{?scl:EOF}
 
 %install
-%{?scl_enable}
+%{?scl:scl enable %{scl_maven} %{scl} - << "EOF"}
 %mvn_install
 
-%{!?scl:mkdir -p %{buildroot}%{_bindir}}
-%{?scl:mkdir -p %{buildroot}%{_root_bindir}}
-%{!?scl:install -pm 755 %{SOURCE1} %{buildroot}%{_bindir}/%{pkg_name}}
-%{?scl:install -pm 755 %{SOURCE1} %{buildroot}%{_root_bindir}/%{pkg_name}}
-%{?scl_disable}
+mkdir -p %{buildroot}%{_bindir}
+install -pm 755 %{SOURCE1} %{buildroot}%{_bindir}/%{pkg_name}
+%{?scl:EOF}
 
 %files -f .mfiles
-%{!?scl:%{_bindir}/%{pkg_name}}
-%{?scl:%{_root_bindir}/%{pkg_name}}
+%{_bindir}/%{pkg_name}
 %license LICENSE.txt
 
 %files javadoc -f .mfiles-javadoc
 %license LICENSE.txt
 
 %changelog
+* Wed Oct 26 2016 Tomas Repik <trepik@redhat.com> - 2.2.7-4
+- use standard SCL macros
+
 * Wed Sep 21 2016 Tomas Repik <trepik@redhat.com> - 2.2.7-3
 - scl conversion
 - removed bundled asm
